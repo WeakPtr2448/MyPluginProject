@@ -5,8 +5,10 @@
 
 #include "FDataTableTool.h"
 #include "SButtonBase.h"
+#include "AppFramework/Public/Widgets/Colors/SColorPicker.h"
 #include "Engine/Font.h"
 #include "Slate/Private/Widgets/Views/SListPanel.h"
+#include "Widgets/Colors/SColorBlock.h"
 #include "Widgets/Input/SSlider.h"
 #include "Widgets/Layout/SGridPanel.h"
 #include "Widgets/Layout/SScrollBox.h"
@@ -91,6 +93,12 @@ void FloodManagerTable::Construct(const FArguments& InArgs)
 						[
 							SAssignNew(ImportButton, SButtonBase)
 							.Tag(*ButtonNameArr[0])
+							.OnButtonPressed_Lambda([]()
+							{
+								//TODO
+								UE_LOG(LogTemp, Log, TEXT("导入ShapeFile文件"));
+								GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("导入ShapeFile文件"));
+							})
 						]
 					]
 
@@ -178,18 +186,32 @@ void FloodManagerTable::Construct(const FArguments& InArgs)
 								]
 								+ SSplitter::Slot()
 								[
-									SAssignNew(MaterialComboBox, SComboBox<TSharedPtr<FString>>)
-									.OnGenerateWidget_Lambda([this](TSharedPtr<FString> InStr)
-									{
-										//TODO...
-										UE_LOG(LogTemp, Log, TEXT("初始化ComboBox"));
-										return SAssignNew(ComboString, STextBlock).Text(FText::FromString("默认选项"));
-									})
-									.OnSelectionChanged_Lambda([](TSharedPtr<FString> InStr, ESelectInfo::Type)
-									{
-										//TODO...
-										UE_LOG(LogTemp, Log, TEXT("当选项改变时"));
-									})
+									SNew(SColorBlock)
+									.Color(FLinearColor(FVector4(1, 1, 1, 1)))
+									.Color_Lambda([this]()-> FLinearColor
+									                 {
+										                 return CurrentColor;
+									                 })
+									                 .OnMouseButtonDown_Lambda(
+										                 [this](const FGeometry& Geometry,
+										                        const FPointerEvent& PointerEvent)
+										                 {
+											                 UE_LOG(LogTemp, Log, TEXT("打开颜色面板"));
+											                 GEngine->AddOnScreenDebugMessage(
+												                 -1, 5.f, FColor::Green,
+												                 TEXT("打开颜色面板"));
+
+											                 SAssignNew(ColorPicker, SColorPicker)
+												                 .OnColorCommitted_Lambda(
+													                 [this](FLinearColor InColor)
+													                 {
+														                 CurrentColor = InColor;
+														                 UE_LOG(LogTemp, Warning,
+															                 TEXT("当前颜色为: %s"),
+															                 *InColor.ToString());
+													                 });
+											                 return FReply::Handled();
+										                 })
 								]
 							]
 						]
@@ -203,24 +225,14 @@ void FloodManagerTable::Construct(const FArguments& InArgs)
 			  .Padding(FMargin(0, 0, 0, 8))
 			[
 				SAssignNew(StartButton, SButtonBase).Tag(*ButtonNameArr[1])
+				                                    .OnButtonPressed_Lambda([]()
+				                                    {
+					                                    GEngine->AddOnScreenDebugMessage(
+						                                    -1, 5.f, FColor::Red,TEXT("开始推演"));
+					                                    UE_LOG(LogTemp, Log, TEXT("开始推演"));
+					                                    //TODO...
+				                                    })
 			]
 		]);
 	UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
-
-	//对按钮进行事件绑定
-	{
-		ImportButton->OnButtonClicked.AddLambda([]()
-		{
-			UE_LOG(LogTemp, Log, TEXT("导入ShapeFile文件"));
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("导入ShapeFile文件"));
-			//TODO...
-		});
-
-		StartButton->OnButtonClicked.AddLambda([]()
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,TEXT("开始推演"));
-			UE_LOG(LogTemp, Log, TEXT("开始推演"));
-			//TODO...
-		});
-	}
 }

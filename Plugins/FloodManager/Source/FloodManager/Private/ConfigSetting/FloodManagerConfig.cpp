@@ -10,6 +10,7 @@ UFloodManagerConfig::UFloodManagerConfig(const FObjectInitializer& Initializer):
 
 	ButtonRowNames.Add(FString("ImportButton"));
 	ButtonRowNames.Add(FString("StartGame"));
+	ButtonRowNames.Add(FString("ColorButton"));
 
 	GConfig->SetArray(TEXT("/Script/FloodManager.FloodManagerConfig"),TEXT("ButtonRowNames"), ButtonRowNames, GGameIni);
 	GConfig->SetArray(TEXT("/Script/FloodManager.FloodManagerConfig"),TEXT("FunctionTitle"), FunctionTitle, GGameIni);

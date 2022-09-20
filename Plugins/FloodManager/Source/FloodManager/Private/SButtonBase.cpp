@@ -26,9 +26,10 @@ void SButtonBase::Construct(const FArguments& InArgs)
 	[
 		SAssignNew(RootSizeBox, SBox)
 		[
-			SNew(SButton).OnClicked_Lambda([this]()
+			SNew(SButton).OnClicked_Lambda([this,InArgs]()
 			{
-				OnButtonClicked.Broadcast();
+				checkf(InArgs._OnButtonPressed.IsBound(),TEXT("未绑定"));
+				InArgs._OnButtonPressed.Execute();
 				return FReply::Handled();
 			}).HAlign(HAlign_Center).VAlign(VAlign_Center)
 			[
@@ -37,6 +38,7 @@ void SButtonBase::Construct(const FArguments& InArgs)
 			]
 		]
 	];
+	// OnButtonClicked = InArgs._OnButtonPressed;
 	RootSizeBox->SetWidthOverride(ButtonAttr->ButtonSize.X);
 	RootSizeBox->SetHeightOverride(ButtonAttr->ButtonSize.Y);
 	RootSizeBox->SetPadding(FMargin(7.f));

@@ -12,12 +12,12 @@ class FloodManagerTable : public SUserWidget
 {
 public:
 	FloodManagerTable();
- ~FloodManagerTable();
+	~FloodManagerTable();
 
 public:
 	SLATE_USER_ARGS(FloodManagerTable)
-	{
-	}
+		{
+		}
 
 	SLATE_END_ARGS()
 
@@ -25,14 +25,16 @@ public:
 	virtual void Construct(const FArguments& InArgs);
 
 private:
-	
 	TSharedPtr<SEditableTextBox> EditableTextBox;
-	
+
 	TSharedPtr<class SButtonBase> ImportButton;
 	TSharedPtr<class SButtonBase> StartButton;
+	TSharedPtr<class SButtonBase> ColorButton;
 
 	TSharedPtr<class SSlider> Slider;
 	TSharedPtr<class SCheckBox> CheckBox;
-	TSharedPtr<class SComboBox<TSharedPtr<FString>>> MaterialComboBox;
+	TSharedPtr<class SColorPicker> ColorPicker;
 	TSharedPtr<class STextBlock> ComboString;
+
+	FLinearColor CurrentColor;
 };

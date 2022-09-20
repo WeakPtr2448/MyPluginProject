@@ -32,6 +32,7 @@ void FFloodManagerModule::RegisterConfig()
 			LOCTEXT("FloodManagerConfigDiscription", "FloodManagerConfigDiscription"),
 			GetMutableDefault<UFloodManagerConfig>()
 		);
+		
 	}
 }
 

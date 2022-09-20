@@ -6,7 +6,8 @@
 #include "FCommonType.h"
 #include "Widgets/SUserWidget.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnButtonClicked);
+DECLARE_DELEGATE(FOnButtonClicked)
+
 
 
 /**
@@ -21,9 +22,10 @@ public:
 	SLATE_USER_ARGS(SButtonBase)
 		{
 		}
-
-	SLATE_END_ARGS()
 	
+	SLATE_EVENT( FOnButtonClicked , OnButtonPressed )
+	
+	SLATE_END_ARGS()
 	
 	FOnButtonClicked OnButtonClicked;
 
